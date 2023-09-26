@@ -1,4 +1,5 @@
-//
+require('dotenv').config()
+
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -7,6 +8,8 @@ const Sequelize = require("sequelize");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname+'/public'))
+
+console.log(process.env.DB_NAME)
 
 const sequelize = new Sequelize(
   process.env.DB_NAME, 
@@ -29,13 +32,7 @@ const Sensor = sequelize.define("sensors", {
   umidade: {
     type: Sequelize.INTEGER
   }
-});
-
-app.get("/", function(req, res) {
-    const temperatura = req.query.temperatura;
-    const umidade = req.query.umidade;
-
-});
+})
 
 app.get("/cadastrar", function (req, res){
     const temperatura = req.query.temperatura;
@@ -55,6 +52,6 @@ app.get("/cadastrar", function (req, res){
     });
 });
 
-app.listen(8080, function() {
-  console.log("Servidor rodando na porta 8080");
-});
+app.listen(process.env.PORT || 3000, function() {
+  console.log(`Servidor rodando na porta ${process.env.PORT}`);
+})
